@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from PIL import Image
 
 from .platinum import Platinum
 
@@ -22,6 +21,6 @@ class Game:
 
     console: Console
 
-    banner: Image
+    banner: str
 
     platinum: Platinum = None
