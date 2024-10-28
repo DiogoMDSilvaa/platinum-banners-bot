@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Set
 from .game import Game
 
@@ -9,6 +9,6 @@ class Player:
 
     gamer_tag: str
     
-    games: Set[Game] = set()
+    games: Set[Game] = field(default_factory = set)
 
    
