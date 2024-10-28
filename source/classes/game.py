@@ -24,6 +24,8 @@ class Console(Enum):
 class Game:
     """Represents a general playstation game"""
 
+    id: str
+
     name: str
 
     console: Console
@@ -259,3 +261,9 @@ class Game:
         )
 
         return banner
+    
+    def __hash__(self):
+        return hash((self.id, self.console.value))
+    
+    def __eq__(self, other):
+        return hash(self) == hash(other)
