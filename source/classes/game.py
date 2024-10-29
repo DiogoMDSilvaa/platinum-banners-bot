@@ -39,6 +39,11 @@ class Game:
 
         if self.platinum is None:
             raise ValueError("This game doesn't have a platinum trophy yet.")
+        
+        if self.platinum.difficulty is not None and self.platinum.playthroughs is not None and self.platinum.hours is not None:
+            has_guide = True
+        else:
+            has_guide = False
 
         banner = Image.open(self.banner).convert("RGBA")
         initial_height = banner.size[1]
@@ -68,13 +73,15 @@ class Game:
             ],
             fill=overlay_color,
         )
-        draw.rectangle(  # Right one
-            [
-                (banner.size[0] - overlay_width - border_size, border_size),
-                (banner.size[0] - border_size, banner.size[1] - border_size),
-            ],
-            fill=overlay_color,
-        )
+        
+        if has_guide:
+            draw.rectangle(  # Right one
+                [
+                    (banner.size[0] - overlay_width - border_size, border_size),
+                    (banner.size[0] - border_size, banner.size[1] - border_size),
+                ],
+                fill=overlay_color,
+            )
 
         #################### Plat Stats ####################
         top_left_overlay_corner = (
@@ -91,66 +98,67 @@ class Game:
         second_y = top_left_overlay_corner[1] + y_offset * 2 - y_offset / 2
         third_y = top_left_overlay_corner[1] + y_offset * 3 - y_offset / 2
 
-        draw.text(
-            (
-                first_x,
-                first_y,
-            ),
-            "Difficulty:",
-            font=normal_font,
-            fill="white",
-            anchor="lm",
-        )
-        draw.text(
-            (
-                second_x,
-                first_y,
-            ),
-            f"{self.platinum.difficulty}/10",
-            font=normal_font,
-            fill="white",
-            anchor="rm",
-        )
-        draw.text(
-            (
-                first_x,
-                second_y,
-            ),
-            "Playthroughs:",
-            font=normal_font,
-            fill="white",
-            anchor="lm",
-        )
-        draw.text(
-            (
-                second_x,
-                second_y,
-            ),
-            str(self.platinum.playthroughs),
-            font=normal_font,
-            fill="white",
-            anchor="rm",
-        )
-        draw.text(
-            (
-                first_x,
-                third_y,
-            ),
-            "Hours:",
-            font=normal_font,
-            fill="white",
-            anchor="lm",
-        )
-        draw.text(
-            (
-                second_x,
-                third_y,
-            ),
-            str(self.platinum.hours),
-            font=normal_font,
-            fill="white",
-            anchor="rm",
-        )
+        if has_guide:
+            draw.text(
+                (
+                    first_x,
+                    first_y,
+                ),
+                "Difficulty:",
+                font=normal_font,
+                fill="white",
+                anchor="lm",
+            )
+            draw.text(
+                (
+                    second_x,
+                    first_y,
+                ),
+                f"{self.platinum.difficulty}/10",
+                font=normal_font,
+                fill="white",
+                anchor="rm",
+            )
+            draw.text(
+                (
+                    first_x,
+                    second_y,
+                ),
+                "Playthroughs:",
+                font=normal_font,
+                fill="white",
+                anchor="lm",
+            )
+            draw.text(
+                (
+                    second_x,
+                    second_y,
+                ),
+                str(self.platinum.playthroughs),
+                font=normal_font,
+                fill="white",
+                anchor="rm",
+            )
+            draw.text(
+                (
+                    first_x,
+                    third_y,
+                ),
+                "Hours:",
+                font=normal_font,
+                fill="white",
+                anchor="lm",
+            )
+            draw.text(
+                (
+                    second_x,
+                    third_y,
+                ),
+                str(self.platinum.hours),
+                font=normal_font,
+                fill="white",
+                anchor="rm",
+            )
 
         #################### Icons and Plat Date ####################
         middle_x = border_size + overlay_width / 2

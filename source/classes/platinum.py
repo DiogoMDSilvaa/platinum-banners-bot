@@ -6,10 +6,10 @@ from datetime import datetime
 class Platinum:
     """Represents a platinum trophy"""
 
-    difficulty: int
+    difficulty: int | None
 
-    playthroughs: int
+    playthroughs: int | None
 
-    hours: int
+    hours: int | None
 
     date_earned: datetime
