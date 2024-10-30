@@ -1,6 +1,12 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Set
-from .game import Game
+
+from bs4 import BeautifulSoup
+from requests_html import HTMLSession
+
+from .game import Console, Game
+from .platinum import Platinum
 
 
 @dataclass
@@ -9,6 +15,32 @@ class Player:
 
     gamer_tag: str
     
-    games: Set[Game] = field(default_factory = set)
+    games_with_platinum: Set[Game] = field(default_factory = set)
 
-   
+    def get_games_list(self):
+        session = HTMLSession()
+        response = session.get(f'https://psnprofiles.com/{self.gamer_tag}')
+        response.html.render()
+
+        soup = BeautifulSoup(response.html.html, "lxml")
+        games_table = soup.find(id = "gamesTable").tbody
+        games_with_platinum = games_table.find_all("tr", class_= "platinum")
+        
+        for game in games_with_platinum:
+            
+            tds = game.find_all("td")
+            anchor = tds[1].div.span.a
+            
+            name = anchor.text
+            game_id = anchor["href"].split("/")[2] 
+            console = Console[tds[2].span.div.span.text]
+            
+            date = tds[1].find_all("div")[-1].text.split("•")[0].strip()
+            space_index = date.index(" ")
+            date = datetime.strptime(date[:space_index - 2] + date[space_index:], "%d %B %Y")
+            
+            game = Game(id = game_id, name = name, console = console)
+            
+            if game not in self.games_with_platinum:
+                pass
+        

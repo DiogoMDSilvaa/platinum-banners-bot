@@ -30,7 +30,7 @@ class Game:
 
     console: Console
 
-    banner: str
+    banner: str = None
 
     platinum: Platinum = None
 
