@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from PIL import Image, ImageOps, ImageDraw, ImageFont
+
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 from .platinum import Platinum
-
 
 FONT_PATH = "assets/PixelifySans-VariableFont_wght.ttf"
 PLATINUM_ICON = "assets/platinum_trophy.png"
@@ -30,7 +30,7 @@ class Game:
 
     console: Console
 
-    banner: str = None
+    banner: Image = None
 
     platinum: Platinum = None
 
@@ -39,13 +39,17 @@ class Game:
 
         if self.platinum is None:
             raise ValueError("This game doesn't have a platinum trophy yet.")
-        
-        if self.platinum.difficulty is not None and self.platinum.playthroughs is not None and self.platinum.hours is not None:
+
+        if (
+            self.platinum.difficulty is not None
+            and self.platinum.playthroughs is not None
+            and self.platinum.hours is not None
+        ):
             has_guide = True
         else:
             has_guide = False
 
-        banner = Image.open(self.banner).convert("RGBA")
+        banner = self.banner.convert("RGBA")
         initial_height = banner.size[1]
 
         #################### Styling ####################
@@ -73,7 +77,7 @@ class Game:
             ],
             fill=overlay_color,
         )
-        
+
         if has_guide:
             draw.rectangle(  # Right one
                 [
@@ -269,9 +273,9 @@ class Game:
         )
 
         return banner
-    
+
     def __hash__(self):
         return hash((self.id, self.console.value))
-    
+
     def __eq__(self, other):
         return hash(self) == hash(other)
