@@ -8,3 +8,5 @@ MANAGE_CHANNEL = "manage"
 
 UPDATE_INTERVAL = 12 * 60  # minutes
 """ The interval between each automatic update"""
+
+CHROMIUM_RASPBERRY_PATH = "/usr/bin/chromium"

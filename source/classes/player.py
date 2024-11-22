@@ -11,6 +11,8 @@ from requests_html import AsyncHTMLSession
 
 from .game import Console, Game
 from .platinum import Platinum
+from utils import running_in_raspberry_pi
+from constants import CHROMIUM_RASPBERRY_PATH
 
 
 @dataclass
@@ -30,6 +32,11 @@ class Player:
 
         # Load user profile page and render the games asynchronously
         session = AsyncHTMLSession()
+
+        # Specify path in raspberry pi
+        if running_in_raspberry_pi():
+            session.browser_args = {"executablePath": CHROMIUM_RASPBERRY_PATH}
+
         response = await session.get(f"https://psnprofiles.com/{self.gamer_tag}")
         await response.html.arender()
         await asyncio.sleep(0.1)
@@ -129,7 +136,19 @@ class Player:
     async def update_psn_profile(self) -> None:
         """Updates the PSNProfile so that the latest trophy information can be extracted"""
 
-        browser = await launch(headless=True)
+        launch_options = {
+            "headless": True,
+        }
+
+        # Adjust options for Raspberry Pi
+        if running_in_raspberry_pi():
+            launch_options.update(
+                {
+                    "executablePath": CHROMIUM_RASPBERRY_PATH,
+                }
+            )
+
+        browser = await launch(**launch_options)
         page = await browser.newPage()
 
         await page.goto("https://psnprofiles.com/")

@@ -144,3 +144,14 @@ def format_channel_name(channel_name: str) -> str:
     """Formats the desired channel name to the name given by Discord"""
 
     return channel_name.replace(" ", "-").lower()
+
+
+def running_in_raspberry_pi() -> bool:
+    """Checks if the script is running on the raspberry pi"""
+
+    try:
+        # Check the platform for Raspberry Pi-specific identifiers
+        with open("/proc/device-tree/model", "r") as f:
+            return "Raspberry Pi" in f.read()
+    except FileNotFoundError:
+        return False
