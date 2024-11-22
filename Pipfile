@@ -11,6 +11,8 @@ requests-html = "*"
 requests = "*"
 lxml-html-clean = "*"
 pyppeteer = "*"
+"discord.py" = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
