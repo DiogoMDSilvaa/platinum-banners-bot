@@ -7,10 +7,15 @@ from discord_bot.commands import *
 from discord_bot.tasks import *
 from dotenv import load_dotenv
 
+from singleton_browser import close_browser_instance
+
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
 if __name__ == "__main__":
-    bot.run(BOT_TOKEN)
+    try:
+        bot.run(BOT_TOKEN)
+    except:
+        close_browser_instance()

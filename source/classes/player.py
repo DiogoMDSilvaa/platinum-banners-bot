@@ -4,15 +4,13 @@ from datetime import datetime
 from io import BytesIO
 from typing import Set
 
+import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-from pyppeteer import launch
-from requests_html import AsyncHTMLSession
+from singleton_browser import get_browser_page
 
 from .game import Console, Game
 from .platinum import Platinum
-from utils import running_in_raspberry_pi
-from constants import CHROMIUM_RASPBERRY_PATH
 
 
 @dataclass
@@ -30,19 +28,13 @@ class Player:
 
         new_platinums_banner = []
 
-        # Load user profile page and render the games asynchronously
-        session = AsyncHTMLSession()
+        page = await get_browser_page()
 
-        # Specify path in raspberry pi
-        if running_in_raspberry_pi():
-            session.browser_args = {"executablePath": CHROMIUM_RASPBERRY_PATH}
-
-        response = await session.get(f"https://psnprofiles.com/{self.gamer_tag}")
-        await response.html.arender()
+        await page.goto(f"https://psnprofiles.com/{self.gamer_tag}")
         await asyncio.sleep(0.1)
 
         # Retrieve all games with platinum
-        profile_page_soup = BeautifulSoup(response.html.html, "lxml")
+        profile_page_soup = BeautifulSoup(await page.content(), "lxml")
         games_table = profile_page_soup.find(id="gamesTable").tbody
         games_with_platinum = games_table.find_all("tr", class_="platinum")
 
@@ -68,12 +60,11 @@ class Player:
             if game not in self.games_with_platinum:
 
                 # Go to game trophies page to get the link of the guide page
-                response = await session.get(
+                await page.goto(
                     f"https://psnprofiles.com/trophies/{game.id}/{self.gamer_tag}"
                 )
-                await response.html.arender()
                 await asyncio.sleep(0.1)
-                game_trophies_soup = BeautifulSoup(response.html.html, "lxml")
+                game_trophies_soup = BeautifulSoup(await page.content(), "lxml")
 
                 # Retrieve game banner
                 banner_url = (
@@ -81,7 +72,7 @@ class Player:
                     .find_all("div")[-1]["style"]
                     .split("url(")[-1][:-1]
                 )
-                banner_response = await session.get(banner_url)
+                banner_response = requests.get(banner_url)
                 await asyncio.sleep(0.1)
                 image_data = BytesIO(banner_response.content)
                 game.banner = Image.open(image_data)
@@ -96,12 +87,9 @@ class Player:
                 # If it has a guide, retrieve information
                 if guide_link is not None:
 
-                    guide_response = await session.get(
-                        f'https://psnprofiles.com{guide_link.a["href"]}'
-                    )
-                    await guide_response.html.arender()
+                    await page.goto(f'https://psnprofiles.com{guide_link.a["href"]}')
                     await asyncio.sleep(0.1)
-                    guide_soup = BeautifulSoup(guide_response.html.html, "lxml")
+                    guide_soup = BeautifulSoup(await page.content(), "lxml")
 
                     platinum_info_spans = guide_soup.find(
                         "div", class_="overview-info"
@@ -136,20 +124,7 @@ class Player:
     async def update_psn_profile(self) -> None:
         """Updates the PSNProfile so that the latest trophy information can be extracted"""
 
-        launch_options = {
-            "headless": True,
-        }
-
-        # Adjust options for Raspberry Pi
-        if running_in_raspberry_pi():
-            launch_options.update(
-                {
-                    "executablePath": CHROMIUM_RASPBERRY_PATH,
-                }
-            )
-
-        browser = await launch(**launch_options)
-        page = await browser.newPage()
+        page = await get_browser_page()
 
         await page.goto("https://psnprofiles.com/")
 
@@ -165,5 +140,3 @@ class Player:
 
         print(f"Updating {self.gamer_tag} profile, sleeping...")
         await asyncio.sleep(10)
-
-        await browser.close()

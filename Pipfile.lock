@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f5ff658de02d46b80e2f863c5fad62f408b7574685917fce5830c43527a713c3"
+            "sha256": "01d20b0a8d09e3883d7c02ea3eab1a4c484d91ff5b2cf223d9faa809ea3aec35"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -139,13 +139,6 @@
             "markers": "python_full_version >= '3.6.0'",
             "version": "==4.12.3"
         },
-        "bs4": {
-            "hashes": [
-                "sha256:a48685c58f50fe127722417bae83fe6badf500d54b55f7e39ffe43b798653925",
-                "sha256:abf8742c0805ef7f662dce4b51cca104cffe52b835238afc169142ab9b3fbccc"
-            ],
-            "version": "==0.0.2"
-        },
         "certifi": {
             "hashes": [
                 "sha256:922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8",
@@ -265,14 +258,6 @@
             "markers": "python_full_version >= '3.7.0'",
             "version": "==3.4.0"
         },
-        "cssselect": {
-            "hashes": [
-                "sha256:666b19839cfaddb9ce9d36bfe4c969132c647b92fc9088c4e23f786b30f1b3dc",
-                "sha256:da1885f0c10b60c03ed5eccbb6b68d6eff248d91976fcde348f395d54c9fd35e"
-            ],
-            "markers": "python_version >= '3.7'",
-            "version": "==1.2.0"
-        },
         "discord.py": {
             "hashes": [
                 "sha256:b8af6711c70f7e62160bfbecb55be699b5cb69d007426759ab8ab06b1bd77d1d",
@@ -280,13 +265,6 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==2.4.0"
-        },
-        "fake-useragent": {
-            "hashes": [
-                "sha256:57415096557c8a4e23b62a375c21c55af5fd4ba30549227f562d2c4f5b60e3b3",
-                "sha256:6387269f5a2196b5ba7ed8935852f75486845a1c95c50e72460e6a8e762f5c49"
-            ],
-            "version": "==1.5.1"
         },
         "frozenlist": {
             "hashes": [
@@ -653,13 +631,6 @@
             "markers": "python_version >= '3.8'",
             "version": "==6.1.0"
         },
-        "parse": {
-            "hashes": [
-                "sha256:967095588cb802add9177d0c0b6133b5ba33b1ea9007ca800e526f42a85af558",
-                "sha256:b41d604d16503c79d81af5165155c0b20f6c8d6c559efa66b4b695c3e5a0a0ce"
-            ],
-            "version": "==1.20.2"
-        },
         "pillow": {
             "hashes": [
                 "sha256:00177a63030d612148e659b55ba99527803288cea7c75fb05766ab7981a8c1b7",
@@ -863,13 +834,6 @@
             "markers": "python_version >= '3.8' and python_version < '4.0'",
             "version": "==2.0.0"
         },
-        "pyquery": {
-            "hashes": [
-                "sha256:0194bb2706b12d037db12c51928fe9ebb36b72d9e719565daba5a6c595322faf",
-                "sha256:aedfa0bd0eb9afc94b3ddbec8f375a6362b32bc9662f46e3e0d866483f4771b0"
-            ],
-            "version": "==2.0.1"
-        },
         "python-dotenv": {
             "hashes": [
                 "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca",
@@ -887,15 +851,6 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==2.32.3"
-        },
-        "requests-html": {
-            "hashes": [
-                "sha256:7e929ecfed95fb1d0994bb368295d6d7c4d06b03fcb900c33d7d0b17e6003947",
-                "sha256:cb8a78cf829c4eca9d6233f28524f65dd2bfaafb4bdbbc407f0a0b8f487df6e2"
-            ],
-            "index": "pypi",
-            "markers": "python_full_version >= '3.6.0'",
-            "version": "==0.10.0"
         },
         "soupsieve": {
             "hashes": [
@@ -928,14 +883,6 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
             "version": "==1.26.20"
-        },
-        "w3lib": {
-            "hashes": [
-                "sha256:756ff2d94c64e41c8d7c0c59fea12a5d0bc55e33a531c7988b4a163deb9b07dd",
-                "sha256:e56d81c6a6bf507d7039e0c95745ab80abd24b465eb0f248af81e3eaa46eb510"
-            ],
-            "markers": "python_version >= '3.8'",
-            "version": "==2.2.1"
         },
         "websockets": {
             "hashes": [
