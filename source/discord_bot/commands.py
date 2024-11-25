@@ -107,7 +107,7 @@ async def add(ctx, new_gamer_tag: str):
         channel = await create_channel(guild=ctx.guild, channel_name=player.gamer_tag)
 
         # Get the banners changes and send the messages
-        banners = await player.get_new_platinums_banners()
+        banners = await player.get_new_platinums_banners(discord_ctx=ctx)
 
         await send_new_banners(channel=channel, banners=banners)
 
@@ -154,7 +154,7 @@ async def update(ctx):
     for player in db.get_players_list():
         await manage_channel.send(f"Updating {player.gamer_tag}...")
 
-        banners = await player.get_new_platinums_banners()
+        banners = await player.get_new_platinums_banners(discord_ctx=ctx)
         await send_new_banners(
             channel=await get_channel(guild=ctx.guild, channel_name=player.gamer_tag),
             banners=banners,

@@ -21,10 +21,18 @@ class Player:
 
     games_with_platinum: Set[Game] = field(default_factory=set)
 
-    async def get_new_platinums_banners(self) -> list:
+    async def get_new_platinums_banners(self, discord_ctx) -> list:
         """Returns the banners of the newly achieved platinums"""
 
-        await self.update_psn_profile()
+        sleep_seconds = 10
+
+        discord_message = await discord_ctx.send(
+            f"Waiting for {self.gamer_tag} PSN profile update ({sleep_seconds} seconds)"
+        )
+
+        await self.__update_psn_profile(sleep_seconds=sleep_seconds)
+
+        await discord_message.edit(content=f"Updated {self.gamer_tag} PSN profile")
 
         new_platinums_banner = []
 
@@ -38,7 +46,9 @@ class Player:
         games_table = profile_page_soup.find(id="gamesTable").tbody
         games_with_platinum = games_table.find_all("tr", class_="platinum")
 
-        for game in games_with_platinum:
+        games_with_platinum.reverse()  # Chronological order
+
+        for i, game in enumerate(games_with_platinum):
 
             # Scrape the information needed to create the game object
             tds = game.find_all("td")
@@ -58,6 +68,9 @@ class Player:
 
             # Retrieve platinum info and generate banner
             if game not in self.games_with_platinum:
+                await discord_message.edit(
+                    content=f"Progress ({i+1}/{len(games_with_platinum)}) - Generating banner for '{game.name}'"
+                )
 
                 # Go to game trophies page to get the link of the guide page
                 await page.goto(
@@ -115,13 +128,14 @@ class Player:
                 self.games_with_platinum.add(game)
                 new_platinums_banner.append(game.create_platinum_banner())
                 print(f"Created banner of game {game.name} for {self.gamer_tag}")
-
-        # Chronologicall order
-        new_platinums_banner.reverse()
+            else:
+                await discord_message.edit(
+                    content=f"Progress ({i+1}/{len(games_with_platinum)}) - '{game.name}' is not a new platinum"
+                )
 
         return new_platinums_banner
 
-    async def update_psn_profile(self) -> None:
+    async def __update_psn_profile(self, sleep_seconds) -> None:
         """Updates the PSNProfile so that the latest trophy information can be extracted"""
 
         page = await get_browser_page()
@@ -138,5 +152,5 @@ class Player:
         }"""
         )
 
-        print(f"Updating {self.gamer_tag} profile, sleeping...")
-        await asyncio.sleep(10)
+        print(f"Updating {self.gamer_tag} profile, sleeping {sleep_seconds} seconds...")
+        await asyncio.sleep(sleep_seconds)
